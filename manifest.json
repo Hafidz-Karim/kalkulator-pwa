@@ -7,7 +7,7 @@
     "theme_color": "#ff9500", 
     "icons": [
       {
-        "src": "icon.png", 
+        "src": "Kalkulator-icon-pwa.png", 
         "sizes": "192x192", 
         "type": "image/png" 
       }
