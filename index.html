@@ -1,64 +1,61 @@
 <!DOCTYPE html>
-<!-- Deklarasi tipe dokumen HTML5 -->
 <html lang="en">
-<!-- Tag pembuka HTML dengan bahasa Inggris -->
 <head>
-  <!-- Bagian metadata dan resource -->
-  <meta charset="UTF-8"> <!-- Encoding karakter UTF-8 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <!-- Viewport untuk responsive design -->
-  <title>Kalkulator PWA</title> <!-- Judul aplikasi di tab browser -->
-  <link rel="stylesheet" href="style.css"> <!-- Link ke file CSS -->
-  <link rel="manifest" href="manifest.json"> <!-- Link ke manifest PWA -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator PWA dengan Riwayat</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!-- Struktur kalkulator -->
   <div class="calculator">
-    <!-- Input display kalkulator -->
-    <input type="text" id="display" disabled> 
-    <!-- disabled agar user tidak bisa mengetik manual -->
+    <input type="text" id="display" disabled>
     
-    <!-- Container tombol-tombol -->
     <div class="buttons">
-      <!-- Baris pertama tombol -->
-      <button onclick="appendToDisplay('7')">7</button>
-      <!-- onclick memanggil fungsi JavaScript -->
-      <button onclick="appendToDisplay('8')">8</button>
-      <button onclick="appendToDisplay('9')">9</button>
-      <button onclick="appendToDisplay('/')">/</button>
-      
-      <!-- Baris kedua tombol -->
-      <button onclick="appendToDisplay('4')">4</button>
-      <button onclick="appendToDisplay('5')">5</button>
-      <button onclick="appendToDisplay('6')">6</button>
-      <button onclick="appendToDisplay('*')">*</button>
-      
-      <!-- Baris ketiga tombol -->
       <button onclick="appendToDisplay('1')">1</button>
       <button onclick="appendToDisplay('2')">2</button>
       <button onclick="appendToDisplay('3')">3</button>
       <button onclick="appendToDisplay('-')">-</button>
       
-      <!-- Baris keempat tombol -->
+      <button onclick="appendToDisplay('4')">4</button>
+      <button onclick="appendToDisplay('5')">5</button>
+      <button onclick="appendToDisplay('6')">6</button>
+      <button onclick="appendToDisplay('*')">*</button>
+      
+      <button onclick="appendToDisplay('7')">7</button>
+      <button onclick="appendToDisplay('8')">8</button>
+      <button onclick="appendToDisplay('9')">9</button>
+      <button onclick="appendToDisplay('/')">/</button>
+      
       <button onclick="appendToDisplay('0')">0</button>
       <button onclick="appendToDisplay('.')">.</button>
-      <button onclick="clearDisplay()">C</button> <!-- Tombol clear -->
+      <button onclick="clearDisplay()">C</button>
       <button onclick="appendToDisplay('+')">+</button>
       
-      <!-- Tombol sama dengan (spans 4 kolom) -->
       <button onclick="calculate()" class="equals">=</button>
+    </div>
+    
+    <!-- Tambahan untuk menampilkan riwayat -->
+ <!-- ... (bagian sebelumnya tetap sama) ... -->
+
+    <!-- Tambahan untuk menampilkan riwayat -->
+    <div class="history-section">
+      <h3>Riwayat Perhitungan</h3>
+      <div class="history-buttons">
+        <button onclick="showHistory()">Tampilkan Riwayat</button>
+        <button onclick="clearHistory()">Hapus Riwayat</button>
+      </div>
+      <ul id="historyList"></ul>
     </div>
   </div>
 
-  <!-- Script JavaScript -->
+<!-- ... (bagian setelahnya tetap sama) ... -->
+
   <script src="script.js"></script>
   
-  <!-- Registrasi Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
-      // Cek apakah browser support Service Worker
       window.addEventListener('load', () => {
-        // Daftarkan Service Worker setelah halaman selesai load
         navigator.serviceWorker.register('sw.js')
           .then(registration => {
             console.log('SW registered!');
@@ -66,6 +63,46 @@
           .catch(err => {
             console.log('SW gagal didaftarkan:', err);
           });
+      });
+    }
+    
+    // Fungsi untuk menampilkan riwayat
+    async function showHistory() {
+      const historyList = document.getElementById('historyList');
+      historyList.innerHTML = '';
+      
+      const history = await getHistory();
+      
+      if (history.length === 0) {
+        historyList.innerHTML = '<li>Tidak ada riwayat</li>';
+        return;
+      }
+      
+      // Urutkan dari yang terbaru
+      history.reverse().forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.expression} = ${item.result}`;
+        historyList.appendChild(li);
+      });
+    }
+    
+    // Fungsi untuk menghapus riwayat
+    async function clearHistory() {
+      if (!db) await initDB();
+      
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(STORE_NAME, 'readwrite');
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.clear();
+        
+        request.onsuccess = () => {
+          document.getElementById('historyList').innerHTML = '<li>Tidak ada riwayat</li>';
+          resolve();
+        };
+        
+        request.onerror = (event) => {
+          reject('Error clearing history: ' + event.target.error);
+        };
       });
     }
   </script>

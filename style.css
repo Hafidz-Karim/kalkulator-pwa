@@ -1,56 +1,203 @@
+/* Reset dan Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif; /* Font default */
-    display: flex;
-    justify-content: center; /* Pusatkan horizontal */
-    align-items: center; /* Pusatkan vertikal */
-    height: 100vh; /* Full viewport height */
-    margin: 0; /* Hilangkan margin default */
-    background: #f0f0f0; /* Warna background */
-  }
-  
-  /* Style container kalkulator */
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.calculator {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+/* Display Styles */
+#display {
+  width: 100%;
+  height: 100px;
+  border: none;
+  background: #2c3e50;
+  color: white;
+  text-align: right;
+  padding: 20px;
+  font-size: 2.5rem;
+  font-weight: 300;
+  outline: none;
+}
+
+/* Tombol Kalkulator */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: #ddd;
+}
+
+.buttons button {
+  height: 70px;
+  border: none;
+  background: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.buttons button:hover {
+  background: #f1f1f1;
+}
+
+.buttons button:active {
+  transform: scale(0.95);
+}
+
+.buttons .equals {
+  grid-column: span 4;
+  background: #3498db;
+  color: white;
+}
+
+.buttons .equals:hover {
+  background: #2980b9;
+}
+
+/* Operator Buttons */
+.buttons button[onclick*="'/'"],
+.buttons button[onclick*="'*'"],
+.buttons button[onclick*="'-'"],
+.buttons button[onclick*="'+'"] {
+  background: #f8f9fa;
+  font-weight: bold;
+}
+
+/* Clear Button */
+.buttons button[onclick="clearDisplay()"] {
+  background: #e74c3c;
+  color: white;
+}
+
+.buttons button[onclick="clearDisplay()"]:hover {
+  background: #c0392b;
+}
+
+/* History Section */
+.history-section {
+  background: white;
+  padding: 20px;
+  border-radius: 0 0 20px 20px;
+  margin-top: -1px;
+}
+
+.history-section h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.history-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.history-section button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.history-section button:first-child {
+  background: #3498db;
+  color: white;
+}
+
+.history-section button:first-child:hover {
+  background: #2980b9;
+}
+
+.history-section button:last-child {
+  background: #e74c3c;
+  color: white;
+}
+
+.history-section button:last-child:hover {
+  background: #c0392b;
+}
+
+#historyList {
+  list-style-type: none;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+#historyList li {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+#historyList li:last-child {
+  border-bottom: none;
+}
+
+#historyList li:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+/* Scrollbar untuk history */
+#historyList::-webkit-scrollbar {
+  width: 8px;
+}
+
+#historyList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0 8px 8px 0;
+}
+
+#historyList::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+#historyList::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
   .calculator {
-    background: #333; /* Warna dark mode */
-    border-radius: 10px; /* Sudut melengkung */
-    padding: 20px; /* Jarak dalam */
-    width: 250px; /* Lebar fixed */
+    max-width: 100%;
+    border-radius: 0;
   }
   
-  /* Style display kalkulator */
   #display {
-    width: 100%;
-    height: 50px;
-    margin-bottom: 10px;
-    font-size: 24px; /* Ukuran font besar */
-    text-align: right; /* Text rata kanan */
-    padding: 5px;
-    box-sizing: border-box; /* Hitung padding dalam width */
+    height: 80px;
+    font-size: 2rem;
   }
   
-  /* Style grid tombol */
-  .buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 kolom sama lebar */
-    gap: 10px; /* Jarak antar tombol */
+  .buttons button {
+    height: 60px;
+    font-size: 1.2rem;
   }
-  
-  /* Style dasar tombol */
-  button {
-    height: 50px;
-    font-size: 18px;
-    border: none; /* Hilangkan border default */
-    border-radius: 5px; /* Sudut melengkung */
-    cursor: pointer; /* Ubah kursor saat hover */
-  }
-  
-  /* Efek saat tombol ditekan */
-  button:active {
-    transform: scale(0.95); /* Sedikit mengecil */
-  }
-  
-  /* Style khusus tombol '=' */
-  .equals {
-    grid-column: span 4; /* Lebar 4 kolom */
-    background: #ff9500; /* Warna oranye */
-    color: white; /* Text putih */
-  }
+}
