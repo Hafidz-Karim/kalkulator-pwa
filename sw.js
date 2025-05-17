@@ -1,5 +1,5 @@
 // Nama cache (versi bisa diupdate untuk cache busting)
-const CACHE_NAME = 'kalkulator-pwa-v2';
+const CACHE_NAME = 'kalkulator-pwa-v3';
 
 // Daftar file yang akan di-cache
 const ASSETS = [
