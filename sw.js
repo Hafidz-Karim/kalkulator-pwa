@@ -1,5 +1,5 @@
 // Nama cache (versi bisa diupdate untuk cache busting)
-const CACHE_NAME = 'kalkulator-pwa-v1';
+const CACHE_NAME = 'kalkulator-pwa-v2';
 
 // Daftar file yang akan di-cache
 const ASSETS = [
@@ -7,7 +7,8 @@ const ASSETS = [
   '/index.html',
   '/style.css',
   '/script.js',
-  '/icon.png'
+  '/kalkulator-icon.png',
+  '/favicon.ico'
 ];
 
 // Event saat Service Worker di-install
